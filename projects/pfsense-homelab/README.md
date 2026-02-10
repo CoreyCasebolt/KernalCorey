@@ -7,7 +7,7 @@ The lab is designed to generate realistic network telemetry that can be analyzed
 ---
 
 ## 🧭 Overview
-The homelab uses **pfSense** as a perimeter firewall to separate **WAN, LAN, and DMZ** networks.  
+The homelab uses **pfSense** as a perimeter firewall to separate **WAN, LAN, and DMZ** networks, providing controlled visibility into traffic flows and security-relevant telemetry.
 This design mirrors common enterprise environments and provides controlled visibility into firewall activity, DNS resolution, and client behavior.
 
 ### Environment Status
@@ -51,7 +51,6 @@ The LAN interface is configured with a static IPv4 address to ensure consistent 
 
 ![LAN Interface Configuration](screenshots/pfsense-lan-interface.png)
 
-
 The firewall configuration enforces:
 - Default deny behavior on inbound WAN traffic
 - Explicit allow rules for LAN outbound traffic
@@ -73,13 +72,11 @@ pfSense provides DHCP services for LAN clients, enabling device attribution and 
 
 ![DHCP Server Configuration](screenshots/pfsense-dhcp-server-lan.png)
 
-
 ### DNS Resolution
 
 The DNS Resolver (Unbound) handles local name resolution and forwards external queries, generating telemetry useful for detecting suspicious domains.
 
 ![DNS Resolver Configuration](screenshots/dns-resolver.png)
-
 
 This enables analysis of:
 - DNS query behavior
@@ -95,7 +92,6 @@ This enables analysis of:
 LAN clients successfully obtain network configuration, reach external resources, and resolve DNS through pfSense.
 
 ![Client Connectivity Test](screenshots/windows10pro-ping-google.png)
-
 
 The environment was validated through:
 - Successful DHCP lease assignment to LAN clients
