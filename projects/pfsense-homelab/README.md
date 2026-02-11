@@ -1,5 +1,7 @@
 # 🔐 pfSense SOC Homelab
 
+![Topology](Topology.png)
+
 ## 🎯 Purpose
 This project establishes a segmented firewall environment to support **SOC-style monitoring, traffic analysis, and incident investigation**.  
 The lab is designed to generate realistic network telemetry that can be analyzed during detection and response exercises.
