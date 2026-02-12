@@ -43,5 +43,5 @@ This step mirrors real-world SOC practice where baseline system states are docum
 ## Firewall Status
 - UFW state recorded
 
-Screenshots available in:
+Screenshots available in: projects/endpoint-baseline/screenshots
 
