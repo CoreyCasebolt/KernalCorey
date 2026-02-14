@@ -2,137 +2,128 @@
 
 ![SOC Homelab Topology](screenshots/Topology.png)
 
-## 🎯 Purpose
-This project establishes a segmented firewall environment to support **SOC-style monitoring, traffic analysis, and incident investigation**.  
-The lab is designed to generate realistic network telemetry that can be analyzed during detection and response exercises.
+## Purpose
+
+This project sets up a segmented network using pfSense to support my SOC-focused homelab.
+
+The goal is to create a realistic environment where I can:
+
+- Monitor traffic
+- Generate logs
+- Practice detection and investigation
+- Simulate internal and external activity
+
+This serves as the foundation for future SIEM and IDS projects.
 
 ---
 
-## 🧭 Overview
-The homelab uses **pfSense** as a perimeter firewall to separate **WAN, LAN, and DMZ** networks, providing controlled visibility into traffic flows and security-relevant telemetry.
-This design mirrors common enterprise environments and provides controlled visibility into firewall activity, DNS resolution, and client behavior.
+## Overview
 
-### Environment Status
+pfSense is used as the firewall and gateway between three networks:
 
-The pfSense dashboard confirms interface status, gateway health, and active services such as DHCP and DNS resolution.
+- WAN (external / attacker side)
+- LAN (internal systems)
+- DMZ (monitored traffic segment)
+
+The dashboard confirms interface status, gateway health, and core services like DHCP and DNS.
 
 ![pfSense Dashboard](screenshots/pfsense-dashboard.png)
 
-Key objectives:
-- Enforce network segmentation
-- Control and observe traffic flows
-- Generate logs suitable for SIEM ingestion
-- Validate end-to-end connectivity and DNS behavior
-
 ---
 
-## 🧪 Lab Architecture
+## Interface Assignments
 
-### Interface Assignments
-
-pfSense interfaces are explicitly mapped to WAN, LAN, and DMZ networks to enforce segmentation and controlled traffic flow.
+Each pfSense interface is mapped to a specific network segment.
 
 ![Interface Assignments](screenshots/pfsense-interface-assignments.png)
 
-### Network Segmentation
-- **WAN**: Simulated external network (attack and internet access)
-- **LAN**: Internal user network (workstations and servers)
-- **DMZ**: Semi-trusted network for exposed services and sensors
+### Network Segments
 
-pfSense acts as the default gateway, DHCP server, DNS resolver, and NAT device for internal networks.
+- **WAN** – Simulated external network (Kali attacker + internet)
+- **LAN** – Internal systems (Windows, Ubuntu, Wazuh, Security Onion management)
+- **DMZ** – Monitoring interface for Security Onion
 
-A topology diagram and configuration screenshots are available in the `screenshots/` directory.
+pfSense handles:
+
+- Default gateway routing
+- DHCP for internal devices
+- DNS resolution
+- NAT for outbound internet access
+- Firewall rules between segments
 
 ---
 
-## 🛡️ Firewall & Network Controls
+## LAN Configuration
 
-### LAN Interface Configuration
-
-The LAN interface is configured with a static IPv4 address to ensure consistent gateway behavior for internal clients.
+The LAN interface uses a static IPv4 address to act as the default gateway for internal machines.
 
 ![LAN Interface Configuration](screenshots/pfsense-lan-interface.png)
 
-The firewall configuration enforces:
-- Default deny behavior on inbound WAN traffic
-- Explicit allow rules for LAN outbound traffic
-- Network Address Translation (NAT) for controlled internet access
-- Segregation between LAN and DMZ networks
+Outbound traffic from LAN is allowed, while inbound WAN traffic is blocked by default.
 
-These controls allow the environment to safely simulate:
-- External scanning attempts
-- Legitimate internal traffic
-- Restricted DMZ communication
+This setup allows me to safely simulate:
+
+- External scans
+- Normal user traffic
+- Restricted communication between zones
 
 ---
 
-## 🌐 DNS & DHCP Services
+## DHCP & DNS
 
-### DHCP Services
-
-pfSense provides DHCP services for LAN clients, enabling device attribution and visibility into client activity.
+pfSense provides DHCP to LAN clients:
 
 ![DHCP Server Configuration](screenshots/pfsense-dhcp-server-lan.png)
 
-### DNS Resolution
-
-The DNS Resolver (Unbound) handles local name resolution and forwards external queries, generating telemetry useful for detecting suspicious domains.
+DNS is handled by the built-in resolver (Unbound):
 
 ![DNS Resolver Configuration](screenshots/dns-resolver.png)
 
-This enables analysis of:
-- DNS query behavior
-- Potential malicious domain lookups
-- Client-to-resolver relationships commonly reviewed in SOC investigations
+This ensures that:
+
+- All DNS queries pass through the firewall
+- DNS activity can later be analyzed in SIEM tools
 
 ---
 
-## 🧾 Validation & Verification
+## Connectivity Verification
 
-### Client Connectivity Verification
-
-LAN clients successfully obtain network configuration, reach external resources, and resolve DNS through pfSense.
+Internal clients were tested to confirm proper configuration.
 
 ![Client Connectivity Test](screenshots/windows10pro-ping-google.png)
 
-The environment was validated through:
-- Successful DHCP lease assignment to LAN clients
-- Verified default gateway and DNS configuration
-- Internet reachability via ICMP
-- DNS resolution confirmed using `nslookup`
+Validation steps included:
 
-Screenshots documenting these checks are included as supporting evidence.
-
----
-
-## 📊 SOC-Relevant Data Generated
-
-This lab produces telemetry commonly analyzed by SOC teams, including:
-- Firewall allow/deny logs
-- DNS query logs
-- DHCP lease records
-- Client connection metadata
-
-These logs form the foundation for future detection, alerting, and incident response exercises.
+- Confirming DHCP lease assignment
+- Verifying default gateway
+- Testing outbound internet access
+- Confirming DNS resolution
 
 ---
 
-## ✅ Status
+## Why This Matters for SOC Work
 
-- ✔ Environment built
-- ✔ Network segmentation enforced
-- ✔ LAN connectivity verified
-- ✔ Internet access and DNS resolution confirmed
+This environment generates useful telemetry such as:
 
-This lab serves as the **baseline environment** for future SOC-focused projects such as:
-- SIEM log ingestion
-- Alert triage simulations
-- Network-based threat detection
-- Incident investigation workflows
+- Firewall logs
+- DNS queries
+- DHCP lease data
+- Internal-to-external traffic flows
+
+These logs will be used in future projects involving:
+
+- Wazuh SIEM integration
+- Security Onion alert analysis
+- Detection testing
+- Incident investigation scenarios
 
 ---
 
-## 📌 Notes
+## Current Status
 
-This project prioritizes **observability and investigation readiness** over complex configurations.  
-Each design choice was made to support realistic SOC analysis rather than purely networking experimentation.
+- Network segmentation implemented
+- Internet access verified
+- DNS functioning correctly
+- Environment ready for SIEM and IDS integration
+
+This project serves as the network foundation for the rest of my SOC homelab.
